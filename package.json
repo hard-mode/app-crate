@@ -2,14 +2,15 @@
   "name": "hardmode-crate",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "session.wisp",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Adam Avramov <fallenblood@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "hardmode-core": "file:../../../../../tmp/npm-22825-96b3909a/git-cache-8986e79cd9c5/ce3856ab1ba6f18df44e82fbf81c201731c172f1",
-    "hardmode-hypertext": "file:../../../../../tmp/npm-22976-a246c2f1/git-cache-167c8eac4b3c/40f246c14d4903695ec1ff453cd902585ef25301"
+    "hardmode-core": "git+https://github.com/hard-mode/core.git",
+    "hardmode-ui-hypertext": "git+https://github.com/hard-mode/ui-hypertext.git",
+    "wisp": "^0.10.0"
   }
 }
