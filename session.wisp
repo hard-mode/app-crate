@@ -1,6 +1,11 @@
 (ns crate.session
   (:require
     [wisp.engine.node]
-    [hardmode-ui-hypertext :as http]))
+    [hardmode-core.src.core
+      :refer [execute-body!]]
+    [hardmode-ui-hypertext
+      :as     http]))
 
-((http.start-server 4000) {})
+
+(execute-body!
+  (http.start-server 4000))
