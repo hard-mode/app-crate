@@ -3,16 +3,18 @@
     [hardmode-core.src.core
       :refer [execute-body!]]
     [hardmode-ui-hypertext
-      :as http]))
+      :as http]
+    [path]))
 
 (defn update-results! [])
 
 (execute-body!
   (http.server 4000
-    (let [options { :pattern  "/"
-                    :template "templates/track-browser.jade" }
-          search-field   (http.input { :type "text" :id "search" })
-          search-results (http.list-view)]
-      (http.page options
-        search-field
-        search-results))))
+    (http.page
+      { :pattern  "/"
+        :template (path.resolve (path.join
+                    __dirname "templates/track-browser.jade")) }
+      (http.input "search"
+        { :type "text"
+          :id   "search" })
+      (http.list-view "results"))) )
