@@ -7,7 +7,7 @@
     [path]
     [wrench
       :refer  [ readdirSyncRecursive ]
-      :rename { readdirSyncRecursive readdir }]))
+      :rename { readdirSyncRecursive readdir }] ))
 
 (defn update-results! [])
 
@@ -21,4 +21,4 @@
         { :type "text"
           :id   "search" })
       (http.list-view "results"
-        { :values (readdir "/home/epimetheus/Music") }))) )
+        { :values (readdir "/home/epimetheus/Music") }) )))

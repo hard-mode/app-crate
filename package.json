@@ -11,7 +11,6 @@
   "dependencies": {
     "hardmode-core": "git+https://github.com/hard-mode/core.git",
     "hardmode-ui-hypertext": "git+https://github.com/hard-mode/ui-hypertext.git",
-    "wisp": "^0.10.0",
     "wrench": "^1.5.8"
   }
 }
