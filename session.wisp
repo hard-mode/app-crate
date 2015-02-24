@@ -4,7 +4,10 @@
       :refer [execute-body!]]
     [hardmode-ui-hypertext
       :as http]
-    [path]))
+    [path]
+    [wrench
+      :refer  [ readdirSyncRecursive ]
+      :rename { readdirSyncRecursive readdir }]))
 
 (defn update-results! [])
 
@@ -17,4 +20,5 @@
       (http.input "search"
         { :type "text"
           :id   "search" })
-      (http.list-view "results"))) )
+      (http.list-view "results"
+        { :values (readdir "/home/epimetheus/Music") }))) )
