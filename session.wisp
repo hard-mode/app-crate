@@ -17,9 +17,6 @@
         :template (path.resolve (path.join
                     __dirname "templates/track-browser.jade")) }
 
-      (gui.input "search"
-        { :type "text"
-          :id   "search" })
+      (gui.widgets.input "search")
 
-      (gui.list-view "results"
-        { :values (readdir "/home/epimetheus/Music") }) )))
+      (gui.widgets.list-view "results"))))
