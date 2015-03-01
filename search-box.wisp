@@ -1,12 +1,17 @@
 (ns crate.search-box
-  (:require [wisp.runtime :refer [not and]]
-            [node-microajax :as microajax]))
+  (:require
+    [hardmode-ui-hypertext.client :refer [init-widget!]]
+    [wisp.runtime                 :refer [not and]]
+    [wisp.sequence                :refer [map]]
+    [node-microajax               :as     microajax]))
 
-(defn init-search-box [container widget-opts]
-  (let [id (:id widget-opts)
-        el (document.getElementById id)]
-    (console.log el)
-    (el.addEventListener "keypress" (debounce 250 send-search-query))))
+(defn init-search-box [widget-opts]
+  (init-widget! widget-opts (fn [element]
+    (document.body.appendChild element)
+    (.addEventListener (aget element.childNodes 0) "keypress"
+      (debounce 250 send-search-query)))))
+
+(set! module.exports init-search-box)
 
 (defn send-search-query [evt]
   (let [query (encodeURI this.value)]
@@ -29,5 +34,3 @@
         (clearTimeout timeout)
         (set! timeout (setTimeout later wait))
         (if call-now (func.apply context args)))))))
-
-(set! module.exports init-search-box)
