@@ -1,8 +1,8 @@
 (ns crate.search-box
   (:require
-    [hardmode-ui-hypertext.client :refer [init-widget!]]
+    [client                       :refer [init-widget!]]
     [wisp.runtime                 :refer [not and]]
-    [wisp.sequence                :refer [map]]
+    [wisp.sequence                :refer [map assoc]]
     [node-microajax               :as     microajax]))
 
 (defn init-search-box [widget-opts]
@@ -18,7 +18,19 @@
     (microajax (str "/search?q=" query) show-search-results)))
 
 (defn show-search-results [response]
-  (console.log response))
+  (let [result-widget  (aget window.HARDMODE.widgets "results")
+        template       (require result-widget.template)
+        search-results (JSON.parse response.response)
+        element        result-widget.container
+        parent         result-widget.container.parentElement]
+    (set! result-widget.values search-results)
+    (template result-widget (fn [err html]
+      (if err (throw err))
+      (let [new-element (document.createElement "div")]
+        (set! new-element.id          (:id result-widget))
+        (set! new-element.innerHTML   html)
+        (set! result-widget.container new-element)
+        (parent.replaceChild new-element element))))))
 
 ; wisp port of http://davidwalsh.name/javascript-debounce-function
 (defn debounce
