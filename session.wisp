@@ -8,15 +8,16 @@
 
 (defn update-results! [])
 
+(defn rel [p] (path.join __dirname p))
+
 (execute-body!
   (gui.server 4000
 
     (gui.page
 
-      { :pattern  "/"
-        :template (path.resolve (path.join
-                    __dirname "templates/track-browser.jade")) }
+      { :pattern  "/" }
 
-      (gui.widgets.input "search")
+      (gui.widgets.input "search"
+        :script (rel "search-box.wisp"))
 
       (gui.widgets.list-view "results"))))
