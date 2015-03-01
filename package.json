@@ -11,6 +11,7 @@
   "dependencies": {
     "hardmode-core": "git+https://github.com/hard-mode/core.git",
     "hardmode-ui-hypertext": "git+https://github.com/hard-mode/ui-hypertext.git",
+    "mongoose": "^3.8.24",
     "node-microajax": "^1.0.2",
     "wrench": "^1.5.8"
   }
