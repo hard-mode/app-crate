@@ -1,8 +1,8 @@
-(ns crate.session
+(ns crate.gui
   (:require
-    [crate.database                :as     database]
-    [hardmode-core.src.core        :refer [execute-body!]]
-    [hardmode-ui-hypertext         :as     gui]
+    [crate.database        :as     database]
+    [hardmode-core.util    :refer [execute-body!]]
+    [hardmode-ui-hypertext :as     gui]
     [path]))
 
 (defn rel [p] (path.join __dirname p))

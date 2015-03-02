@@ -4,10 +4,15 @@
     [send-data.json                :as     send-json]
     [url]
     [wisp.runtime                  :refer [= not]]
-    [wrench :refer  [ readdirSyncRecursive ]
-            :rename { readdirSyncRecursive readdir }] ))
+    [wrench]))
 
-(def collection (readdir "/home/epimetheus/Music"))
+(def collection [])
+
+; reads music directory in chunks --
+; callback is called once per subdir
+(wrench.readdirRecursive "/home/epimetheus/Music" (fn [err files]
+  (if err (throw err))
+  (if files (set! collection (collection.concat files)))))
 
 (defn find-in-collection [search-term]
   (console.log "Searching for" search-term "...")
