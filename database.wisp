@@ -41,7 +41,8 @@
   (mongoose.connect (str "mongodb://localhost:" db-port))
   (wrench.readdirRecursive directory (fn [err files]
     (if err (throw err))
-    (map read-file files))))
+    (map read-file
+      (map (fn [file] (path.resolve (path.join directory file))) files)))))
 
 (defn read-file [filename]
   (Track.find { :path filename } (fn [err tracks]
