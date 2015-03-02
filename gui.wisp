@@ -10,7 +10,7 @@
 
 (start-db (rel "data") (fn [err db-port]
 
-  (database.read-collection! db-port "/home/epimetheus/Music")
+  (database.init-collection! db-port "/home/epimetheus/Music")
 
   (execute-body!
     (gui.server 4000
