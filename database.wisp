@@ -48,9 +48,10 @@
       (map (fn [file] (path.resolve (path.join directory file))) files)))))
 
 (defn read-file! [filename]
-  (Track.find { :path filename } (fn [err tracks]
-    (if err (throw err))
-    (if (not tracks.length) (scan-file filename)))))
+  (process.nextTick (fn []
+    (Track.find { :path filename } (fn [err tracks]
+      (if err (throw err))
+      (if (not tracks.length) (scan-file filename)))))))
 
 (defn scan-file! [filename]
   (if (= (path.extname filename) ".mp3")
@@ -70,14 +71,14 @@
 ;; search operations
 
 (defn find-in-collection [search-term callback]
-  (console.log "Searching for" search-term "...")
   (Track.find { :title (RegExp. search-term "i") } (fn [err results]
+    (console.log "Found" results.length "results for" search-term)
     (callback err results))))
 
 (defn serve-search-results [request response]
   (let [parsed-url    (url.parse request.url true)
-        search-term   parsed-url.query.q
-        response-data (find-in-collection search-term)]
+        search-term   parsed-url.query.q]
+    (console.log "Searching for" search-term "...")
     (find-in-collection search-term (fn [err results]
       (if err (throw err))
       (send-json request response results)))))

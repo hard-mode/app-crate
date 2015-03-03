@@ -1,0 +1,11 @@
+ol.search-results(id=id+"__list")
+  - var values = values || []
+  - if (values)
+    - for (var i = 0; i < values.length; i++)
+      li.search-result
+        div.search-result-title
+          | Title: #{values[i].title}
+        div.search-result-album
+          | Album: #{values[i].album}
+        div.search-result-year
+          | Year:  #{values[i].year}
