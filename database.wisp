@@ -53,7 +53,7 @@
 
 (defn scan-file [filename]
   (if (= (path.extname filename) ".mp3")
-    (try (musicmetadata stream { :duration true } write)
+    (try
       (let [stream  (fs.createReadStream filename)
             write   (fn [err track]
                       (if err (throw err)
@@ -64,22 +64,25 @@
                                        :length track.duration })
                         (fn [err saved] (if err (throw err))
                                         (console.log "saved" saved) ))))]
-        (console.log "scanning" filename))
-        (catch error (console.log "Scanning error" filename error)))))
+        (console.log "scanning" filename)
+        (musicmetadata stream { :duration true } write))
+      (catch error (console.log "Scanning error" filename error)))))
 
 
 ;; search operations
 
-(defn find-in-collection [search-term]
+(defn find-in-collection [search-term callback]
   (console.log "Searching for" search-term "...")
-  (collection.filter (fn [item]
-    (not (= (item.indexOf search-term) -1)))))
+  (Track.find { :title (RegExp. search-term "i") } (fn [err results]
+    (callback err results))))
 
 (defn serve-search-results [request response]
   (let [parsed-url    (url.parse request.url true)
         search-term   parsed-url.query.q
         response-data (find-in-collection search-term)]
-    (send-json request response response-data)))
+    (find-in-collection search-term (fn [err results]
+      (if err (throw err))
+      (send-json request response results)))))
 
 (defn route-search [pattern]
   (fn [context]
