@@ -8,16 +8,15 @@
 
 (defn rel [p] (path.join __dirname p))
 
-(start-db (rel "data") (fn [err db-port]
+(database.connect! "27017")
+(database.scan-directory! "/home/epimetheus/Music")
 
-  (database.init-collection! db-port "/home/epimetheus/Music")
+(execute-body!
+  (gui.server 4000
 
-  (execute-body!
-    (gui.server 4000
+    (gui.page { :pattern "/" }
+      (gui.widgets.input "search"
+        :script (rel "search-box.wisp"))
+      (gui.widgets.list-view "results"))
 
-      (gui.page { :pattern "/" }
-        (gui.widgets.input "search"
-          :script (rel "search-box.wisp"))
-        (gui.widgets.list-view "results"))
-
-      (database.route-search "/search")))))
+    (database.route-search "/search")))

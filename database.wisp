@@ -37,21 +37,22 @@
 
 ;; collection operations
 
-(defn init-collection! [db-port directory]
-  (mongoose.connect (str "mongodb://localhost:" db-port))
+(defn connect! [db-port]
+  (console.log "Connecting to MongoDB on" db-port)
+  (mongoose.connect (str "mongodb://localhost:" db-port)))
+
+(defn scan-directory! [directory]
   (wrench.readdirRecursive directory (fn [err files]
     (if err (throw err))
     (map read-file
       (map (fn [file] (path.resolve (path.join directory file))) files)))))
 
-(defn read-file [filename]
+(defn read-file! [filename]
   (Track.find { :path filename } (fn [err tracks]
     (if err (throw err))
-    (if tracks.length
-      (console.log "found" tracks)
-      (scan-file filename)))))
+    (if (not tracks.length) (scan-file filename)))))
 
-(defn scan-file [filename]
+(defn scan-file! [filename]
   (if (= (path.extname filename) ".mp3")
     (try
       (let [stream  (fs.createReadStream filename)
@@ -61,10 +62,7 @@
                                        :title  track.title
                                        :album  track.album
                                        :year   track.year
-                                       :length track.duration })
-                        (fn [err saved] (if err (throw err))
-                                        (console.log "saved" saved) ))))]
-        (console.log "scanning" filename)
+                                       :length track.duration }))))]
         (musicmetadata stream { :duration true } write))
       (catch error (console.log "Scanning error" filename error)))))
 
