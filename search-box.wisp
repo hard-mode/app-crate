@@ -15,12 +15,12 @@
 
 (defn send-search-query [evt]
   (let [query (encodeURI this.value)]
-    (microajax (str "/search?q=" query) show-search-results)))
+    (microajax (str "/search?q=" query) (fn [response]
+      (show-search-results! (JSON.parse response.response))))))
 
-(defn show-search-results [response]
+(defn show-search-results! [search-results]
   (let [result-widget  (aget window.HARDMODE.widgets "results")
         template       (require result-widget.template)
-        search-results (JSON.parse response.response)
         element        result-widget.container
         parent         result-widget.container.parentElement]
     (set! result-widget.values search-results)
@@ -30,7 +30,19 @@
         (set! new-element.id          (:id result-widget))
         (set! new-element.innerHTML   html)
         (set! result-widget.container new-element)
-        (parent.replaceChild new-element element))))))
+        (bind-search-result-events!   new-element)
+        (parent.replaceChild          new-element element))))))
+
+(defn bind-search-result-events! [element]
+  (let [class-name  "search-result-key-analyze"
+        slice       Array.prototype.slice
+        links       (element.getElementsByClassName class-name)
+        bind-event  (fn [node] (node.addEventListener "click"
+                      (fn [evt] (evt.preventDefault)
+                                (console.log this.dataset.id))))]
+    (map bind-event (slice.call links))))
+
+(defn request-key-analysis [id])
 
 ; wisp port of http://davidwalsh.name/javascript-debounce-function
 (defn debounce

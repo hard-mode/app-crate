@@ -36,7 +36,7 @@
     :end   Number })))
 
 
-;; collection operations
+;; scanning
 
 (defn connect! [db-port]
   (console.log "Connecting to MongoDB on" db-port)
@@ -69,7 +69,14 @@
       (catch error (console.log "Scanning error" filename error)))))
 
 
-;; search operations
+;; analysis
+
+(defn route-analyze-key [pattern] (fn [context] context))
+
+(defn route-analyze-bpm [pattern] (fn [context] context))
+
+
+;; retrieval
 
 (defn sorted-results [results field]
   (results.sort (fn [a b]
@@ -92,6 +99,10 @@
     (find-in-collection search-term (fn [err results]
       (if err (throw err))
       (send-json request response results)))))
+
+(defn route-analyze-key [pattern] (fn [context] context))
+
+(defn route-analyze-bpm [pattern] (fn [context] context))
 
 (defn route-search [pattern]
   (fn [context]

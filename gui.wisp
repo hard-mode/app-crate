@@ -21,4 +21,8 @@
         :template (rel "track-list.blade")
         :style    (rel "track-list.styl")))
 
-    (database.route-search "/search")))
+    (database.route-search "/search")
+
+    (database.route-analyze-key "/analyze-key")
+
+    (database.route-analyze-bpm "/analyze-bpm")))
