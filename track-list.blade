@@ -3,9 +3,36 @@ ol.search-results(id=id+"__list")
   - if (values)
     - for (var i = 0; i < values.length; i++)
       li.search-result
-        div.search-result-title
-          | Title: #{values[i].title}
-        div.search-result-album
-          | Album: #{values[i].album}
-        div.search-result-year
-          | Year:  #{values[i].year}
+
+        .search-result-title
+          | #{values[i].title}
+
+        .search-result-album
+          span.search-result-label
+            | From:
+          | #{values[i].album}
+
+        .search-result-year
+          span.search-result-label
+            | Year:
+          | #{values[i].year}
+
+        .search-result-bpm-and-key
+
+          span.search-result-key
+            span.search-result-label
+              | Key
+            - if (values[i].key)
+              | #{values[i].key}
+            - else
+              a(href="#")
+                | Analyze
+
+          span.search-result-bpm
+            span.search-result-label
+              | BPM
+            - if (values[i].bpm)
+              | #{values[i].bpm}
+            - else
+              a(href="#")
+                | Analyze

@@ -7,7 +7,7 @@
     [path]
     [send-data.json                :as     send-json]
     [url]
-    [wisp.runtime                  :refer [= not]]
+    [wisp.runtime                  :refer [= not > <]]
     [wisp.sequence                 :refer [map]]
     [wrench]))
 
@@ -24,7 +24,8 @@
     :album  String
     :year   String
     :length Number
-    :bpm    Number })))
+    :bpm    Number
+    :key    String })))
 
 (def Artist (mongoose.model "Artist" (Schema.
   { :name  String })))
@@ -70,10 +71,19 @@
 
 ;; search operations
 
+(defn sorted-results [results field]
+  (results.sort (fn [a b]
+    (let [a (aget a field)
+          b (aget b field)]
+      (if (< a b) -1
+        (if (> a b) 1
+          0))))))
+
 (defn find-in-collection [search-term callback]
   (Track.find { :title (RegExp. search-term "i") } (fn [err results]
     (console.log "Found" results.length "results for" search-term)
-    (callback err results))))
+    (callback err (sorted-results results :title)))))
+
 
 (defn serve-search-results [request response]
   (let [parsed-url    (url.parse request.url true)
