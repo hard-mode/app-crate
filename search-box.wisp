@@ -3,17 +3,19 @@
     [client                       :refer [init-widget!]]
     [wisp.runtime                 :refer [not and]]
     [wisp.sequence                :refer [map assoc]]
-    [node-microajax               :as     microajax]))
+    [node-microajax               :as     microajax]
+    [virtual-dom.h                :as     $]))
 
-(defn init-search-box [widget-opts]
-  (init-widget! widget-opts (fn [element]
-    (document.body.appendChild element)
-    (.addEventListener (aget element.childNodes 0) "keypress"
-      (debounce 250 send-search-query)))))
+(defn init! [widget-opts]
+  (init-widget! widget-opts)
+  (.addEventListener (:element widget-opts) "keypress"
+    (debounce 250 send-search-query!))
+  widget-opts)
 
-(set! module.exports init-search-box)
+(defn template [context]
+  ($ "input" { :type "text" :id context.id }))
 
-(defn send-search-query [evt]
+(defn send-search-query! [evt]
   (let [query (encodeURI this.value)]
     (microajax (str "/search?q=" query) (fn [response]
       (show-search-results! (JSON.parse response.response))))))
