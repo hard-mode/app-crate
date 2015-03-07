@@ -6,14 +6,14 @@
     [node-microajax               :as     microajax]
     [virtual-dom.h                :as     $]))
 
-(defn init! [widget-opts]
-  (init-widget! widget-opts)
-  (.addEventListener (:element widget-opts) "keypress"
-    (debounce 250 send-search-query!))
-  widget-opts)
+(defn template [widget]
+  ($ "input" { :type "text" :id widget.id }))
 
-(defn template [context]
-  ($ "input" { :type "text" :id context.id }))
+(defn init! [widget]
+  (init-widget! widget)
+  (.addEventListener (:element widget) "keypress"
+    (debounce 250 send-search-query!))
+  widget)
 
 (defn send-search-query! [evt]
   (let [query (encodeURI this.value)]
@@ -21,8 +21,8 @@
       (show-search-results! (JSON.parse response.response))))))
 
 (defn show-search-results! [search-results]
-  (let [result-widget  (aget window.HARDMODE.widgets "results")]
-    (result-widget.value.set search-results)))
+  (let [result-widget (aget window.HARDMODE.widgets "results")]
+    (result-widget.state.set { :value search-results })))
 
 ; wisp port of http://davidwalsh.name/javascript-debounce-function
 (defn debounce
