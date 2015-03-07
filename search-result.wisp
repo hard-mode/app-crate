@@ -1,12 +1,7 @@
-(ns crate.track-list
+(ns crate.search-result
   (:require [virtual-dom.h :as $]))
 
-(fn search-results [id results]
-  (let [id (str "#" id "__list")]
-    ($ (str "ol.search-results" id)
-      (results.map search-result))))
-
-(fn search-result [track]
+(defn search-result [track]
   ($ "li.search-result" { "data-id" track.id } [
 
     ($ "div.search-result-title" track.title)
@@ -34,3 +29,16 @@
                { "href"    "#"
                  "data-id" track.id }
                "Analyze")) ]) ]) ]))
+
+(set! module.exports search-result)
+
+(defn bind-search-result-events! [element]
+  (let [class-name  "search-result-key-analyze"
+        slice       Array.prototype.slice
+        links       (element.getElementsByClassName class-name)
+        bind-event  (fn [node] (node.addEventListener "click"
+                      (fn [evt] (evt.preventDefault)
+                                (console.log this.dataset.id))))]
+    (map bind-event (slice.call links))))
+
+(defn request-key-analysis [id])

@@ -15,11 +15,13 @@
   (gui.server 4000
 
     (gui.page { :pattern "/" }
+
       (gui.widgets.input "search"
-        :script (rel "search-box.wisp"))
+        :script        (rel "search-box.wisp"))
+
       (gui.widgets.list-view "results"
-        :template (rel "track-list.blade")
-        :style    (rel "track-list.styl")))
+        :item-template (rel "search-result.wisp")
+        :style         (rel "track-list.styl")))
 
     (database.route-search "/search")
 

@@ -21,30 +21,8 @@
       (show-search-results! (JSON.parse response.response))))))
 
 (defn show-search-results! [search-results]
-  (let [result-widget  (aget window.HARDMODE.widgets "results")
-        template       (require result-widget.template)
-        element        result-widget.container
-        parent         result-widget.container.parentElement]
-    (set! result-widget.values search-results)
-    (template result-widget (fn [err html]
-      (if err (throw err))
-      (let [new-element (document.createElement "div")]
-        (set! new-element.id          (:id result-widget))
-        (set! new-element.innerHTML   html)
-        (set! result-widget.container new-element)
-        (bind-search-result-events!   new-element)
-        (parent.replaceChild          new-element element))))))
-
-(defn bind-search-result-events! [element]
-  (let [class-name  "search-result-key-analyze"
-        slice       Array.prototype.slice
-        links       (element.getElementsByClassName class-name)
-        bind-event  (fn [node] (node.addEventListener "click"
-                      (fn [evt] (evt.preventDefault)
-                                (console.log this.dataset.id))))]
-    (map bind-event (slice.call links))))
-
-(defn request-key-analysis [id])
+  (let [result-widget  (aget window.HARDMODE.widgets "results")]
+    (result-widget.value.set search-results)))
 
 ; wisp port of http://davidwalsh.name/javascript-debounce-function
 (defn debounce
