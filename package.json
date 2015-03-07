@@ -12,6 +12,7 @@
     "hardmode-core": "git+https://github.com/hard-mode/core.git",
     "hardmode-ui-hypertext": "git+https://github.com/hard-mode/ui-hypertext.git",
     "mongoose": "^3.8.24",
+    "mongoose-find-one-or-create": "^0.2.0",
     "musicmetadata": "^1.0.0",
     "node-microajax": "^1.0.2",
     "observ": "^0.2.0",

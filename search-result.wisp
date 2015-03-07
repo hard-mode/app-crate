@@ -7,6 +7,10 @@
     ($ "div.search-result-title" track.title)
 
     ($ "div.search-result-album" [
+      ($ "span.search-result-label" "By")
+      track.artist])
+
+    ($ "div.search-result-album" [
       ($ "span.search-result-label" "From")
       track.album])
 
@@ -41,4 +45,4 @@
                                 (console.log this.dataset.id))))]
     (map bind-event (slice.call links))))
 
-(defn request-key-analysis [id])
+(defn request-key-analysis [id] nil)

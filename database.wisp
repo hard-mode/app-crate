@@ -20,15 +20,12 @@
 (def Track (mongoose.model "Track" (Schema.
   { :path   String
     :title  String
-    :artist ObjectId
+    :artist String
     :album  String
     :year   String
     :length Number
     :bpm    Number
     :key    String })))
-
-(def Artist (mongoose.model "Artist" (Schema.
-  { :name  String })))
 
 (def Cue (mongoose.model "Cue" (Schema.
   { :track ObjectId
@@ -52,30 +49,23 @@
   (process.nextTick (fn []
     (Track.find { :path filename } (fn [err tracks]
       (if err (throw err))
-      (if (not tracks.length) (scan-file filename)))))))
+      (if (not tracks.length) (scan-track! filename)))))))
 
 (defn scan-track! [filename]
   (if (= (path.extname filename) ".mp3")
-    (try
-      (let [stream      (fs.createReadStream filename)
-            set-artist! (fn [err track] (if err (throw err))
-                          (Artist.find { :name track.artist } (fn [err artists]
-                            (if artists.length
-                              (save-track! (aget artists 0))
-                              (let [artist (Artist. { :name track.artist })]
-                                (artist.save (fn [err] (if err (throw err))
-                                  (save-track! track artist))))))))
-            save-track! (fn [track artist]
-                          (.save (Track. 
-                            { :path   filename 
-                              :title  track.title
-                              :artist artist
-                              :album  track.album
-                              :year   track.year
-                              :length track.duration })))]
-        
-        (musicmetadata stream { :duration true } set-artist!))
-      (catch error (console.log "Scanning error" filename error)))))
+    (console.log "Scanning" filename)
+    (let [stream      (fs.createReadStream filename)
+          save-track! (fn [err track]
+                        (.save (Track.
+                          { :path   filename
+                            :title  track.title
+                            :artist track.artist
+                            :album  track.album
+                            :year   track.year
+                            :length track.duration })))]
+      (try
+        (musicmetadata stream { :duration true } save-track!)
+        (catch error (console.log "Scanning error" filename error))))))
 
 (defn add-artist! [artist-name]
   (.save (Artist. { :name artist-name })))
