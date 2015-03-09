@@ -6,28 +6,34 @@
     [hardmode-ui-hypertext :as     gui]
     [path]))
 
+(def ^:private server    gui.server)
+(def ^:private page      gui.page)
+(def ^:private panel     gui.widgets.panel)
+(def ^:private grid      gui.widgets.grid)
+(def ^:private input     gui.widgets.input)
+(def ^:private button    gui.widgets.button)
+(def ^:private list-view gui.widgets.list-view)
+
 (defn rel [p] (path.join __dirname p))
 
 (database.connect! "27017")
 ;(database.scan-directory! "/home/epimetheus/Music")
 
 (execute-body!
-  (gui.server 4000
+  (server 4000
 
-    (gui.page { :pattern "/" }
-
-      (gui.widgets.panel     "work-queue-panel")
-        ;:body [(gui.widgets.list-view "work-queue-list")])
-
-      (gui.widgets.button    "show-queue"
-        :text          "Job queue...")
-
-      (gui.widgets.input     "search"
-        :script        (rel "search-box.wisp"))
-
-      (gui.widgets.list-view "results"
-        :item-template (rel "search-result.wisp")
-        :style         (rel "track-list.styl")))
+    (page { :pattern  "/"
+            :template (rel "template.wisp")}
+      (panel "work-queue-panel")
+      (grid { :dir :v, :sizes [1 7] }
+        (grid { :dir :h, :sizes [4 1] }
+          (input  "search"
+            :script (rel "search-box.wisp"))
+          (button "show-queue"
+            :text   "Job queue..."))
+        (list-view "results"
+          :item-template (rel "search-result.wisp")
+          :style         (rel "track-list.styl"))))
 
     (database.route-search "/search")
 
