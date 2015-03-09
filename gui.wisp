@@ -16,7 +16,13 @@
 
     (gui.page { :pattern "/" }
 
-      (gui.widgets.input "search"
+      (gui.widgets.panel     "work-queue-panel")
+        ;:body [(gui.widgets.list-view "work-queue-list")])
+
+      (gui.widgets.button    "show-queue"
+        :text          "Job queue...")
+
+      (gui.widgets.input     "search"
         :script        (rel "search-box.wisp"))
 
       (gui.widgets.list-view "results"

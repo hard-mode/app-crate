@@ -1,10 +1,11 @@
 (ns crate.search-box
   (:require
-    [client                       :refer [init-widget!]]
-    [wisp.runtime                 :refer [not and]]
-    [wisp.sequence                :refer [map assoc]]
-    [node-microajax               :as     microajax]
-    [virtual-dom.h                :as     $]))
+    [hardmode-ui-hypertext.widgets.input.client :as input]
+    [client               :refer [init-widget!]]
+    [wisp.runtime         :refer [not and]]
+    [wisp.sequence        :refer [map assoc]]
+    [node-microajax       :as     microajax]
+    [virtual-dom.h        :as     $]))
 
 (defn template [widget]
   ($ "input" { :type "text" :id widget.id }))
