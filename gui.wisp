@@ -9,7 +9,7 @@
 (def ^:private server    gui.server)
 (def ^:private page      gui.page)
 (def ^:private panel     gui.widgets.panel)
-(def ^:private grid      gui.widgets.grid)
+(def ^:private box       gui.widgets.box)
 (def ^:private input     gui.widgets.input)
 (def ^:private button    gui.widgets.button)
 (def ^:private list-view gui.widgets.list-view)
@@ -23,10 +23,10 @@
   (server 4000
 
     (page { :pattern  "/"
-            :template (rel "template.wisp")}
+            :template (rel "template.wisp") }
       (panel "work-queue-panel")
-      (grid { :dir :v, :sizes [1 7] }
-        (grid { :dir :h, :sizes [4 1] }
+      (box :v [1 7]
+        (box :h [4 1]
           (input  "search"
             :script (rel "search-box.wisp"))
           (button "show-queue"
