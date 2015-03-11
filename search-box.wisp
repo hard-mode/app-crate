@@ -8,13 +8,10 @@
     [virtual-dom.h        :as     $]))
 
 (defn template [widget]
-  ($ "input" { :type "text" :id widget.id }))
-
-(defn init! [widget]
-  (init-widget! widget)
-  (.addEventListener (:element widget) "keypress"
-    (debounce 250 send-search-query!))
-  widget)
+  (let [props { :type     "text"
+                :id       widget.id
+                :ev-input (debounce 250 send-search-query!) }]
+    ($ "input" props)))
 
 (defn send-search-query! [evt]
   (let [query (encodeURI this.value)]
