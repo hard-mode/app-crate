@@ -8,15 +8,15 @@
     [virtual-dom.h        :as     $]))
 
 (defn template [widget]
-  (let [props { :type     "text"
-                :id       widget.id
-                :ev-input (debounce 250 send-search-query!) }]
+  (let [on-input (fn [evt] (send-search-query! evt.target.value))
+        props    { :type     "text"
+                   :id       widget.id
+                   :ev-input on-input }]
     ($ "input" props)))
 
-(defn send-search-query! [evt]
-  (let [query (encodeURI this.value)]
-    (microajax (str "/search?q=" query) (fn [response]
-      (show-search-results! (JSON.parse response.response))))))
+(defn send-search-query! [query]
+  (microajax (str "/search?q=" (encodeURI query)) (fn [response]
+    (show-search-results! (JSON.parse response.response)))))
 
 (defn show-search-results! [search-results]
   (let [result-widget (aget window.HARDMODE.widgets "results")]
