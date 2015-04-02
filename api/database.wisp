@@ -93,7 +93,6 @@
     (console.log "Found" results.length "results for" search-term)
     (callback err (sorted-results results :title)))))
 
-
 (defn serve-search-results [request response]
   (let [parsed-url    (url.parse request.url true)
         search-term   parsed-url.query.q]
@@ -101,6 +100,9 @@
     (find-in-collection search-term (fn [err results]
       (if err (throw err))
       (send-json request response results)))))
+
+
+;; api
 
 (defn route-analyze-key [pattern] (fn [context] context))
 
@@ -110,3 +112,8 @@
   (fn [context]
     (add-route context
       (route pattern serve-search-results))))
+
+(defn connect-and-add-routes! [port]
+  (connect! port)
+  (fn [context]
+    (route-search "/search") context))
